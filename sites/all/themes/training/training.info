@@ -1,0 +1,24 @@
+name = Training theme
+description = Training theme HTML
+package = Core
+version = VERSION
+core = 7.x
+stylesheets[all][] = css/reset.css
+stylesheets[all][] = css/style.css
+stylesheets[all][] = css/layout.css
+
+;add Path JS...
+
+regions[header] = Header
+regions[navigation] = Navigation
+regions[content] = Content
+regions[slideshow] = Slide show
+regions[markup] = Markup
+regions[footer] = Footer
+
+;settings[garland_width] = fluid
+
+; Information added by Drupal.org packaging script on 2014-05-08
+version = "7.28"
+project = "drupal"
+datestamp = "1399522731"

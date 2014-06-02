@@ -1,0 +1,5 @@
+name = Photo Order
+description = Photo list to select customer order.
+package = easyTECH
+core = 7.x
+files[] = photo_order.module

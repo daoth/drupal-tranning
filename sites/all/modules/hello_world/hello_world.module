@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Main file of Hello World module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function hello_world_block_info() {
+  $blocks = array();
+
+  $blocks['hello_world'] = array(
+    'info' => t('Hello world'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hello_world_block_view($delta = '') {
+//  $block = array();
+//  $table = 'album';
+//  $result = db_select('album', 'a')->fields('a')->execute()->fetchAll();
+
+  if ($delta == 'hello_world') {
+    $block['subject'] = t('Test cai coi');
+    //$block['content'] = t('This is the block content.');
+    $myname = "Tran Hieu Dao";
+    $block['content'] = theme('hello_world', array('myname' => $myname));
+  }
+
+  return $block;
+
+//    $myname = "Tran Hieu Dao";
+//    return theme('hello_world', array('myname'=>$myname));
+}
+//function hello_world_menu() {
+//  $items['photo_order/event/%'] = array(
+//    'title' => 'Photos',
+//    'page callback' => 'photo_order_hook',
+//    'page arguments' => array(2), // The matched wildcard.
+//    'access callback' => TRUE,
+//    'type' => MENU_CALLBACK,
+//    );
+//  return $items;
+//}
+//
+//function photo_order_hook(){
+//    $myname = "Tran Hieu Dao";
+//    return theme('hello_world',array('myname' => $myname));
+//}
+
+function hello_world_theme(){
+    return array(
+    'hello_world' => array(
+      'template' => 'myblock-theme',
+      'variables' => array(
+        'myname' => NULL,
+      ),
+     ),
+  );
+}

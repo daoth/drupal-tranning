@@ -1,0 +1,3 @@
+name = Hello World
+description = Small module which just provides a block.
+core = 7.x

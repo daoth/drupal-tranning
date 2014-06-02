@@ -1,0 +1,43 @@
+<?php
+/**
+* @file
+* Use this module to select photos.
+*/
+/**
+* Implementation of hook_menu().
+*/
+function photo_order_menu() {
+  $items['photo_order/event/%'] = array(
+    'title' => 'Photos',
+    'page callback' => 'photo_order_showlist',
+    'page arguments' => array(2), // The matched wildcard.
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    );
+  return $items;
+}
+/**
+* Page callback.
+*/
+function photo_order_showlist($event = NULL) {
+  $query = db_select('node', 'n');
+  $query
+    ->fields('n', array('title'))
+    ->range(0,100);
+  $result = $query->execute();
+  $output = 'List <br/>';
+  foreach($result as $row) {
+    $output .= $row->title."<br/>";
+  }
+  return theme('photo_order',array('results' => $output));
+}
+function photo_order_theme() {
+  return array(
+    'photo_order' => array(
+      'template' => 'photo-order',
+      'variables' => array(
+        'results' => NULL,
+      ),
+     ),
+  );
+}
