@@ -1,14 +1,7 @@
 <?php
 
-//function training_preprocess_page(&$vars) {
-//  $scripts = drupal_add_js();
-//  if (in_array('page-media-photos', $vars['template_files'])) {
-//    unset($scripts['all']['module']['PATH_OF_JS_NEED_TO_REMOVE']);
-//  }
-//  $vars['scripts'] = drupal_get_js('header', $scripts);
-//}
-
 $template_path = path_to_theme();
+drupal_add_js($template_path.'/js/jquery.browser.js');
 drupal_add_js($template_path.'/js/cufon-yui.js');
 drupal_add_js($template_path.'/js/cufon-replace.js');
 drupal_add_js($template_path.'/js/Open_Sans_400.font.js');

@@ -5,6 +5,8 @@
 <title><?php print $head_title; ?></title>
 <?php print $styles; ?>
 <?php print $scripts; ?>
+<script>$ = jQuery;</script>
+
 <!--[if lt IE 7]>
 	<div style=' clear: both; text-align:center; position: relative;'>
 		<a href="http://www.microsoft.com/windows/internet-explorer/default.aspx?ocid=ie6_countdown_bannercode"><img src="http://www.theie6countdown.com/images/upgrade.jpg" border="0"  alt="" /></a>
@@ -19,6 +21,7 @@
     <?php print $page;?>
 	<script type="text/javascript"> Cufon.now(); </script>
 	<script type="text/javascript">
+            
 		$(function(){
 			$('.slider')._TMS({
 				prevBu:'.prev',
