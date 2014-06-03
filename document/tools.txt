@@ -1,0 +1,8 @@
+FO
+https://github.com/fabi1cazenave/webL10n
+
+Zend
+ZendX
+ZFDebug
+Polycast
+PHPExcel
