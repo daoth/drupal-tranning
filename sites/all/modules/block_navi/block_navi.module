@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Main file of Hello World module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function block_navi_block_info() {
+  $blocks = array();
+
+  $blocks['block_navi'] = array(
+    'info' => t('Block navi(training)'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function block_navi_block_view($delta = '') {
+  if ($delta == 'block_navi') {
+    $block['subject'] = t('');
+    $block['content'] = theme('block_navi');
+  }
+
+  return $block;
+}
+
+function block_navi_theme(){
+    return array(
+    'block_navi' => array(
+      'template' => 'block-navi',
+      'variables' => array(
+        'myname' => NULL,
+      ),
+     ),
+  );
+}

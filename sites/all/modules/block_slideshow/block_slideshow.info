@@ -1,0 +1,4 @@
+name = Block slide show(training)
+description = Block slide show(training).
+core = 7.x
+package = html-block

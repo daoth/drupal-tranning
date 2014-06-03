@@ -36,6 +36,17 @@ drupal_add_js($template_path.'/js/FF-cash.js');
 									</div>
 								</div>
 								<a class="button-2" href="#">Read More</a>-->
+
+<?php
+
+//$block = module_invoke('block_banner', 'block_view', 'block_banner_left', 'Nguyen Van A');
+//print $block['content'];
+
+//$data = theme('block_banner_left', array('myname' => 'Tran Hieu Dao'));
+//print $data;
+
+?>
+<?php print $messages; ?>
 <?php print render($page['content']);?>
 							</div>
 						</div>

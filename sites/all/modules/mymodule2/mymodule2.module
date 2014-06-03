@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function mymodule2_menu()
+{
+    $items['mymodule2/contact'] = array(
+        'title' => 'Demo - Ajax form submit in Drupal 7',
+        'description' => '',
+        'page callback' => 'mymodule2_contact',
+        'access callback' => TRUE,
+    );
+    return $items;
+}
+
+function mymodule2_contact()
+{
+    module_load_include('inc', 'contact', 'contact.pages');
+    return drupal_get_form('contact_site_form');
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function mymodule2_form_alter(&$form, &$form_state, $form_id)
+{
+    switch ($form_id) {
+        case 'contact_site_form':
+            // use the ajax submit only on the page 'mymodule2/contact'
+            if ($_GET['q'] == 'mymodule2/contact' || $_GET['q'] == 'system/ajax') {
+                $form['#prefix'] = '<div id="mymodule2_contact">';
+                $form['#suffix'] = '</div>';
+                // add an additional submit function to rebuild and reset the form
+                $form['#submit'][] = 'mymodule2_contact_site_form_submit';
+                // include necessary files for the ajax callback
+                $form_state['build_info']['files'] = array("mymodule2_contact" => drupal_get_path('module', 'contact') . "/contact.pages.inc");
+                // adjust the form to use ajax submit
+                $form['actions']['submit']['#ajax'] = array(
+                    'callback' => 'mymodule2_contact_site_form_ajax_callback',
+                    'wrapper' => 'mymodule2_contact',
+                    'method' => 'replace',
+                    'effect' => 'fade',
+                );
+            }
+            break;
+    }
+}
+
+function mymodule2_contact_site_form_submit($form, &$form_state)
+{
+    // rebuild the form after submitted successfully
+    $form_state['rebuild'] = TRUE;
+    // try this if you want to reset the form item values
+    $form_state['input'] = array();
+}
+
+function mymodule2_contact_site_form_ajax_callback($form, &$form_state)
+{
+    print $form_state['values']['subject'];exit();
+    return $form;
+}
+
+

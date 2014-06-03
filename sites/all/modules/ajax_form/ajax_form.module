@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * Main file of Hello World module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function ajax_form_block_info() {
+  $blocks = array();
+
+  $blocks['ajax_form'] = array(
+    'info' => t('My form for test send mail'),
+  );
+
+  return $blocks;
+}
+
+function ajax_form_menu($delta = '') {
+    $item = array();
+    $item['ajax_form'] = array(
+        'title'=>t('Small ajax form'),
+        'description'=>t('Small ajax form'),
+        'page callback'=>'ajax_form_callback2',
+        'access arguments'=>array('access content'),
+        'type'=>MENU_CALLBACK
+    );
+    return $item;
+}
+
+function ajax_form_callback2(){
+    return drupal_get_form('ajax_form_data');
+}
+
+/**
+* This function is called the "form builder". It builds the form.
+* Notice, it takes one argument, the $form_state
+*/
+function ajax_form_data($form, &$form_state) {
+     return array(
+        'email' => array(
+            '#type' => 'textfield',
+            '#title' => t('Join our Newsletter'),
+            '#required' => TRUE,
+            '#attributes' => array(
+                'placeholder' => t('mail@example.com'),
+            ),
+        ),
+        'submit' => array(
+            '#type' => 'submit',
+            '#value' => t('Subscribe'),
+            '#ajax' => array(
+                'callback' => 'demo_form_ajax_submit',
+                'wrapper' => 'demo-demo-form',
+                'method' => 'replace',
+                'effect' => 'fade',
+            ),
+        ),
+    );
+}
+
+function demo_form_ajax_submit($form, $form_state)
+{
+    if (!empty($form_state['input']['email'])) {
+        return 'Subscribed !';
+    } else {
+        return $form;
+    }
+}

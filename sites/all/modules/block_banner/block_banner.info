@@ -1,0 +1,4 @@
+name = Block banner(training)
+description = Block banner(training).
+core = 7.x
+package = html-block

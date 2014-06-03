@@ -1,0 +1,3 @@
+name = My form module
+description = Module for test mail
+core = 7.x

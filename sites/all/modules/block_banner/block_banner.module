@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Main file of Hello World module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function block_banner_block_info() {
+  $blocks = array();
+  $blocks['block_banner'] = array(
+    'info' => t('Block banner(training)'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function block_banner_block_view($delta = '', $myname = '') {
+
+  if ($delta == 'block_banner') {
+    $block['subject'] = t('');
+    $block['content'] = theme('block_banner');
+  } else if($delta == 'block_banner_left'){
+      $block['subject'] = t('aaaaaaaaaaa');
+      $block['content'] = theme('block_banner_left', array('myname'=>$myname));
+  }
+  return $block;
+}
+
+function block_banner_theme($myname = ''){
+    return array(
+    'block_banner' => array(
+      'template' => 'block-banner',
+      'variables' => array(
+        'myname' => NULL,
+      ),
+     ),
+     'block_banner_left' => array(
+      'template' => 'block-banner-left',
+      'variables' => array(
+        'myname' => $myname,
+      ),
+     ),
+  );
+}
+

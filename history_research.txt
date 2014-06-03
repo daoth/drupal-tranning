@@ -1,0 +1,18 @@
+module research
+    https://drupal.org/node/1074360
+    Archivement:
+    + In Drupal 7, there are at least eight block hooks.
+    + Hook info
+    + Hook help
+    + Hook block view
+    + Basic get data from database
+    + Overwrite a url content. Example: node--[node_id].tpl.php
+    + Invoke module in template using module_invoke
+
+
+Form
+https://drupal.org/node/262422
+https://drupal.org/node/717722
+
+Form and ajax
+http://www.jaychen.me/snippet/ajax-form-submission-drupal-7

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Main file of Hello World module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function block_slideshow_block_info() {
+  $blocks = array();
+
+  $blocks['block_slideshow'] = array(
+    'info' => t('Block slideshow(training)'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function block_slideshow_block_view($delta = '') {
+  if ($delta == 'block_slideshow') {
+    $block['subject'] = t('');
+    $block['content'] = theme('block_slideshow');
+  }
+
+  return $block;
+}
+
+function block_slideshow_theme(){
+    return array(
+    'block_slideshow' => array(
+      'template' => 'block-slideshow',
+      'variables' => array(
+        'myname' => NULL,
+      ),
+     ),
+  );
+}

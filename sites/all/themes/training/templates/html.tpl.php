@@ -21,7 +21,7 @@
     <?php print $page;?>
 	<script type="text/javascript"> Cufon.now(); </script>
 	<script type="text/javascript">
-            
+
 		$(function(){
 			$('.slider')._TMS({
 				prevBu:'.prev',
