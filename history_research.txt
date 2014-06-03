@@ -33,3 +33,47 @@ I think you need to invest some time finding the most appropriate hook for this.
 
     or finally, hook_theme_regitry_alter, to alter the theme registry and do what you wanted to do (the html.tpl.php change)
 
+function apps_theme($existing, $type, $theme, $path) {
+    $items = array(
+        'node_app' => array(
+            // Don't specify the path in the template name.
+            // Unless you have your template inside a directory within this module.
+            'template' =>  'node--app',
+            'variables' => array('node' => (object)array()),
+            // If you want to put the tpl in another location, you can use this key.
+            'theme path' => drupal_get_path('module', 'another_module'),
+        ),
+    );
+    return $items;
+}
+
+=====
+
+Suppose you have a module which contains some templates that follow standard template suggestion criteria. ex: (block--module--delta.tpl.php). By default, Drupal 7 will not search your module directory. It took me hours of googling and cursing to figure out how to do this. The magic is below. Much of this code was lifted from other examples/modules, unfortunately I didn't document where.
+Code Block 1: Theme Registry Alter Hook
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function mymodule_theme_registry_alter(&$theme_registry) {
+  $mod_path = drupal_get_path('module', 'mymodule');
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $mod_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _mymodule_insert_after_first_element($theme_registry[$h]['theme paths'], $mod_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _mymodule_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}
+
+The code above basically creates a copy of the theme registry, works some secret theme_process_magic and appends our module path. It also requires a little helper function for dealing with the array. I hope this post will come up for anyone Googling "Drupal 7 alter theme registry path" and save them some time :) 
