@@ -1,0 +1,64 @@
+<?php
+
+function mylogin_menu(){
+    $items = array();
+    $items['mylogin'] = array(
+        'title' => 'Custom Login Page',
+        'page callback' => 'mylogin_custom_login_page',
+        'type' => MENU_CALLBACK,
+        'access callback' => TRUE,
+    );
+
+    return $items;
+}
+/**
+ * Implements hook_theme().
+ */
+function mylogin_theme() {
+    return array(
+      'mylogin' => array(
+        'variables' => array('page' => array()),
+        'template' => 'override-html', // mylogin.tpl.php in your module folder
+
+      ),
+    );
+}
+/**
+ * Generate a custom login page
+ * @see more in print_controller_html() in print.pages.inc of the Print module 
+ */
+function mylogin_custom_login_page(){
+    $page = _mylogin_login_page_prerequisite(); // get/prepare necessary variables, js, css for the page
+    
+    //redirect to module user if logined
+    //$page['form'] = drupal_render(drupal_get_form('user_login'));
+
+    // prepare html in mylogin.tpl.php
+    // See more in print.tpl.php() in the Print module  
+    $html = theme('mylogin', array('page' => $page)); 
+
+    drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
+    drupal_send_headers();
+    print $html; // cease Drupal page rendering and render directly to the browser
+    
+}
+/**
+ * Prepare the array for the template with common details
+ * @see more _print_var_generator() in print.pages.inc of the Print module
+ */
+function _mylogin_login_page_prerequisite(){
+    global $base_url, $language; 
+    $page = array();
+    $page['language']   = $language->language;
+    $page['head']       = drupal_get_html_head();
+    $page['title']      = '';
+    $page['scripts']    = drupal_get_js();
+    $page['favicon']    = '';
+    // if there is a custom css file for this page
+    // drupal_add_css(drupal_get_path('module', 'mymodule') . '/css/mylogin.css');
+    $page['css'] = drupal_get_css();
+    $page['message'] = drupal_get_messages();
+    $page['footer_scripts'] = drupal_get_js('footer');
+
+    return $page;
+} 

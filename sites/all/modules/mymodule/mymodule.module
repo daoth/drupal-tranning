@@ -16,6 +16,6 @@ function say_hello_world() {
     $vars['type']="ul";
     $vars['title'] = "";
     $vars['attributes']=array("");
-    $vars['items'][0]="This is a simple proof of concept module";
+    $vars['items'][0]="Noi dung hien thi";
     return theme_item_list($vars);
 }

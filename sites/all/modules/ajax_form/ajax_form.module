@@ -63,9 +63,24 @@ function ajax_form_data($form, &$form_state) {
 
 function demo_form_ajax_submit($form, $form_state)
 {
+
     if (!empty($form_state['input']['email'])) {
         return 'Subscribed !';
     } else {
         return $form;
     }
+}
+
+function ajax_form_preprocess_page(&$vars){
+//    print_r($vars);
+//    exit('ccc');
+}
+
+function ajax_form_theme(){
+    return array(
+        'ajax_form'=>array(
+            'template'=>'ajax_form'
+        )
+    );
+    
 }

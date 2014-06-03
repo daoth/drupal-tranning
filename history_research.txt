@@ -16,3 +16,20 @@ https://drupal.org/node/717722
 
 Form and ajax
 http://www.jaychen.me/snippet/ajax-form-submission-drupal-7
+
+Override html.tpl.php(xem module mylogin)
+keyword: Issue a html.tpl.php override from a module?
+http://drupal.stackexchange.com/questions/54733/issue-a-html-tpl-php-override-from-a-module
+
+I think you need to invest some time finding the most appropriate hook for this. You can try
+
+    hook_page_alter to change "what is going to be rendered",
+
+    use hook_menu_alter to change the delivery callback for login and register menu routers,
+
+    use a page--user-login.tpl.php file to take over the page template of the login page,
+
+    add some template suggestions in template.php to use a different html.tpl.php file just for the login paths,
+
+    or finally, hook_theme_regitry_alter, to alter the theme registry and do what you wanted to do (the html.tpl.php change)
+
