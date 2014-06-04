@@ -14,8 +14,9 @@ function mymodule_menu() {
 function say_hello_world() {
     $vars = array();
     $vars['type']="ul";
-    $vars['title'] = "";
+    $vars['title'] = "Test";
     $vars['attributes']=array("");
-    $vars['items'][0]="Noi dung hien thi";
+    $vars['items'][]="Noi dung hien thi";
+    $vars['items'][]="asldkhfklasd";
     return theme_item_list($vars);
 }

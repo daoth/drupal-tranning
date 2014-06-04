@@ -10,7 +10,7 @@ function photo_order_menu() {
   $items['photo_order/event/%/%/%'] = array(
     'title' => 'Photos',
     'page callback' => 'photo_order_showlist',
-    'page arguments' => array(2, 3), // The matched wildcard.
+    'page arguments' => array(1, 3, 4), // The matched wildcard.
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
     );
@@ -21,7 +21,7 @@ function photo_order_menu() {
 */
 function photo_order_showlist($event = NULL, $test = NULL, $test2 = NULL) {
     print $event.$test.$test2;
-    exit('cc');
+    exit();
     $query = db_select('node', 'n');
     $query->fields('n', array('title'))->range(0, 100);
     $result = $query->execute();

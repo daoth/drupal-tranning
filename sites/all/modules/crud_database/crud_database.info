@@ -1,0 +1,4 @@
+name = CRUD Database
+description = This module is use for test CRUD Database
+core = 7.x
+package = Tranning

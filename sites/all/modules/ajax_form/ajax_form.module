@@ -51,24 +51,46 @@ function ajax_form_data($form, &$form_state) {
         'submit' => array(
             '#type' => 'submit',
             '#value' => t('Subscribe'),
-            '#ajax' => array(
-                'callback' => 'demo_form_ajax_submit',
-                'wrapper' => 'demo-demo-form',
-                'method' => 'replace',
-                'effect' => 'fade',
-            ),
+//            '#ajax' => array(
+//                'callback' => 'demo_form_ajax_submit',
+//                'wrapper' => 'demo-demo-form',
+//                'method' => 'replace',
+//                'effect' => 'fade',
+//            ),
         ),
     );
 }
 
+
+function ajax_form_data_submit($form, &$form_state){
+    $to = $form_state['values']['email'];
+    global $language;//or language_default();
+
+    $params['subject'] = t('Drupal SMTP test e-mail');
+    $params['body']    = array(t('If you receive this message it means your site is capable of using SMTP to send e-mail.'));
+    drupal_mail('smtp', 'smtp-test', $to, $language, $params);
+
+    drupal_set_message($form_state['values']['email']);
+}
+
+//ham dung cho ajax
 function demo_form_ajax_submit($form, $form_state)
 {
-
-    if (!empty($form_state['input']['email'])) {
-        return 'Subscribed !';
+    if(!empty($form_state['input']['email'])){
+        if (drupal_mail('my_form', 'some_mail_key', $to, language_default(), $params, $from, TRUE))
+        {
+            return "Thanks, we will be in contact with more information soon.";
+            //drupal_set_message('Thanks, we will be in contact with more information soon.');
+        } else {
+            return "There was an error subscribing you. Please try again later";
+            //drupal_set_message('There was an error subscribing you. Please try again later');
+        }
+        return $form_state['input']['email'];
     } else {
         return $form;
     }
+
+
 }
 
 function ajax_form_preprocess_page(&$vars){
@@ -82,5 +104,5 @@ function ajax_form_theme(){
             'template'=>'ajax_form'
         )
     );
-    
+
 }

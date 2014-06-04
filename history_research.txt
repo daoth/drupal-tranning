@@ -76,4 +76,17 @@ function _mymodule_insert_after_first_element(&$a, $element) {
   }
 }
 
-The code above basically creates a copy of the theme registry, works some secret theme_process_magic and appends our module path. It also requires a little helper function for dealing with the array. I hope this post will come up for anyone Googling "Drupal 7 alter theme registry path" and save them some time :) 
+The code above basically creates a copy of the theme registry, works some secret theme_process_magic and appends our module path. It also requires a little helper function for dealing with the array. I hope this post will come up for anyone Googling "Drupal 7 alter theme registry path" and save them some time :)
+
+=======================================
+http://www.onextrapixel.com/2013/12/27/how-to-create-a-drupal-7-theme-from-scratch/
+https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7
+https://drupal.org/node/1089656 (template rule)
+https://drupal.org/node/17565
+
+https://drupal.org/node/197122 (mail example)
+http://drupal.stackexchange.com/questions/14512/how-do-i-pass-a-variable-from-a-custom-module-to-its-template-file
+
+http://2bits.com/articles/beware-drupal-modules-disable-page-cache.html
+
+https://drupal.org/node/797346  (dis cache)

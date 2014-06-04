@@ -1,0 +1,223 @@
+<?php
+
+/**
+ * @file
+ * Main file of Hello World module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function crud_database_block_info() {
+  $blocks = array();
+
+  $blocks['crud_database'] = array(
+    'info' => t('Create read update delete database'),
+  );
+
+  return $blocks;
+}
+
+function crud_database_menu() {
+    $item = array();
+    $item['crud_database/index/%/%'] = array(
+        'title'=>t('CRUD Database form'),
+        'description'=>t('Data form'),
+        'page callback'=>'crud_database_main',
+        'page arguments'=>array(2,3),
+        'access arguments'=>array('access content'),
+        'type'=>MENU_CALLBACK,
+        'access callback'=>TRUE
+    );
+    $item['crud_database/index'] = array(
+        'title'=>t(''),
+        'description'=>t('Data form'),
+        'page callback'=>'crud_database_index',
+        'access arguments'=>array('access content'),
+        'type'=>MENU_CALLBACK,
+    );
+    $item['crud_database/add'] = array(
+        'title'=>t('Create/Edit Record'),
+        'description'=>t('Data form'),
+        'page callback'=>'crud_database_form',
+        'access arguments'=>array('access content'),
+        'type'=>MENU_CALLBACK,
+    );
+    $item['crud_database/email/%/%'] = array(
+        'title'=>t('Create/Edit Record'),
+        'description'=>t('Data form'),
+        'page callback'=>'crud_database_email',
+        'page arguments'=>array(2,3),
+        'access arguments'=>array('access content'),
+        'type'=>MENU_CALLBACK,
+    );
+    return $item;
+}
+
+function crud_database_main($action = 'index', $id = null){
+    switch ($action){
+        case 'add':
+        case 'edit':
+            return crud_database_form($id);
+            break;
+        case 'delete':
+            return crud_database_detele($id);
+            break;
+        case 'view':
+            return crud_database_view($id);
+            break;
+        default:
+            return crud_database_index();
+            break;
+    }
+}
+function crud_database_store($key_and_value){
+    if(isset($key_and_value['id']) && $key_and_value['id'] != '') {
+        $id = $key_and_value['id'];
+        unset($key_and_value['id']);
+        $num_update = db_update('album')->fields($key_and_value)->condition('id', $id)->execute();
+        if($num_update>0) {
+            drupal_set_message ("Update complete!");
+            return true;
+        } else {
+            drupal_set_message("Update failed!");
+            return false;
+        }
+
+    } else {
+        unset($key_and_value['id']);
+        $id = db_insert('album')->fields($key_and_value)->execute();
+        if($id>0) {
+            drupal_set_message (t('Insert success!'));
+            return true;
+        } else {
+            drupal_set_message (t('Insert failde!'));
+            return false;
+        }
+    }
+}
+
+function crud_database_form($id = null){
+    return drupal_get_form("album_form", $id);
+}
+
+function album_form_submit($form, &$form_state){
+    $data_insert = array(
+        'name'=>$form_state['input']['name'],
+        'description'=>$form_state['input']['description'],
+        'id' => $form_state['input']['id']
+    );
+
+    if(crud_database_store($data_insert))
+        drupal_goto ('/crud_database/index');
+    return crud_database_index();
+}
+
+function crud_database_back_javascript(){
+    $html = '
+  <script type"text/javascript">
+  window.location = "/crud_database/index";
+  </script>
+  ';
+    return $html;
+}
+
+function album_form(){
+    $arg = func_get_args();
+    if(isset($arg[1]['build_info']['args'][0])){
+        $id = $arg[1]['build_info']['args'][0];
+        $data = db_select('album', 'a')->condition('id', $id)->fields('a')->execute()->fetchAll();
+        $data = $data[0];
+    }
+    $form['name'] = array(
+        '#type'=>'textfield',
+        '#title'=>'Name',
+        '#value'=>(@$data->name)?$data->name:'' ,
+        '#required'=>TRUE,
+        '#attributes'=>array(
+            'placeholder'=>t('Please input name')
+        )
+    );
+    $form['description'] = array(
+        '#type'=>'textarea',
+        '#title'=>'Description',
+        '#value'=>(@$data->description)?$data->description:''
+    );
+    $form['id'] = array(
+        '#type'=>'hidden',
+        '#value'=>(@$data->id)?$data->id:''
+    );
+    $form['submit'] = array(
+        '#type'=>'submit',
+        '#value'=>'Submit'
+    );
+//    $form['cancel'] = array(
+//        '#type'=>'button',
+//        '#value'=>'Cancel',
+//        '#ajax' => array(
+//          'callback' => 'crud_database_ back_javascript'
+//        )
+//    );
+    $form['back']['#markup'] = "<input type='button' class='button-user' value='Cancel' onclick='window.location = \"/crud_database/index\"'/>";
+    return $form;
+}
+
+function crud_database_detele($id = null){
+    $num_delete = db_delete('album')->condition('id', $id)->execute();
+    if($num_delete > 0)
+        drupal_set_message (t("Record is deleted!"));
+    else
+        drupal_set_message (t("No record is deleted!"));
+    return crud_database_index();
+}
+function crud_database_index(){
+    $data = db_select('album', 'a')->fields('a')->execute()->fetchAll();
+    $html = '<a href="/crud_database/add">Add</a><br><table width="100%"><tr><th width="20%">Name</th><th width="60%">Description</th><th>&nbsp;</th></tr>';
+    foreach($data as $row){
+        $description = truncate_utf8($row->description, 50). " ...";
+        $html .= "<tr><td><a href='/crud_database/index/view/{$row->id}'>{$row->name}</a></td><td>{$description}</td><td><a href='/crud_database/index/edit/{$row->id}'>Edit</a> | <a href='/crud_database/index/delete/{$row->id}'>Delete</a></td></tr>";
+    }
+    $html .= "</table>";
+    return $html;
+}
+
+function crud_database_theme(){
+    return array(
+        "crud_database_content"=>array(
+            "template"=>"data-content",
+            "variables"=>array()
+        )
+    );
+}
+
+function crud_database_view($id = null){
+    $data = db_select('album', 'a')->fields('a')->condition('id', $id)->execute()->fetchAll();
+    $data = $data[0];
+    $variables = array("name"=>$data->name, "description"=>$data->description, "myid"=>"$id");
+    return theme("crud_database_content", $variables);
+
+}
+
+function crud_database_email($email = '', $id = null){
+
+    if(is_null($id)){
+        drupal_set_message('No id');
+        drupal_goto('/crud_database/index');
+    }else{
+        $data = db_select('album', 'a')->fields('a')->condition('id', $id)->execute()->fetchAll();
+        $data = $data[0];
+
+        global $language;//or language_default();
+
+        $params['subject'] = t($data->name);
+        $params['body']    = array(t($data->description));
+        $result = drupal_mail('smtp', 'smtp-test', $email, $language, $params);
+        if($result) {
+            drupal_set_message ("This content is send to $email");
+        } else {
+            drupal_set_message("Send content failed!");
+        }
+        drupal_goto("crud_database/index/view/$id");
+    }
+
+}
